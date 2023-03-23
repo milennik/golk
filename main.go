@@ -40,16 +40,7 @@ func main() {
 		log.Fatal(err)
 	}
 	stmt, _ := txn.Prepare(pq.CopyIn("testtable", "username", "password"))
-	m := &testtable{
-		username: "name",
-		password: "pass",
-	}
-	mList := make([]*testtable, 0, 100)
-	for i := 0; i < 100; i++ {
-		fmt.Println(i)
-		mList = append(mList, m)
-	}
-	fmt.Println(m)
+	mList := generateData()
 	for _, user := range mList {
 		_, err := stmt.Exec(user.username, user.password)
 		if err != nil {
@@ -72,4 +63,17 @@ func main() {
 	fmt.Println(delta.Nanoseconds())
 	fmt.Println("Program finished successfully")
 
+}
+
+func generateData() []*testtable {
+	tt := &testtable{
+		username: "name",
+		password: "pass",
+	}
+	data := make([]*testtable, 0, 100)
+	for i := 0; i < 100; i++ {
+		fmt.Println(i)
+		data = append(data, tt)
+	}
+	return data
 }
